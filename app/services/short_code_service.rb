@@ -34,7 +34,26 @@ class ShortCodeService
     code_attributes[:url]
   end
 
+  def get_code_stats
+    code_attributes = @repo.find(@informed_code)
+
+    raise ShortCodeNotFound unless code_attributes
+
+    format_attributes(code_attributes)
+  end
+
   private
+
+  def format_attributes(code_attributes)
+    result = {
+      startDate: code_attributes[:start_date].iso8601,
+      redirectCount: code_attributes[:redirect_count].to_i,
+    }
+
+    result.merge!({ lastSeenDate: code_attributes[:last_seen_date].iso8601 }) if code_attributes[:redirect_count] > 0
+
+    result
+  end
 
   def generate_or_use_informed_code
     return generate_new_code if @informed_code.nil?
