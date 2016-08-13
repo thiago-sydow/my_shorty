@@ -1,8 +1,8 @@
 require 'sinatra/base'
 
-class ShortCode < Sinatra::Base
-  get '/' do
-    'Hello'
+class ShortCodeController < Sinatra::Base
+  post '/shorten' do
+    
   end
 
   configure do
@@ -18,4 +18,5 @@ class ShortCode < Sinatra::Base
     set :root, File.dirname(__FILE__)
     enable :logging
   end
+
 end
