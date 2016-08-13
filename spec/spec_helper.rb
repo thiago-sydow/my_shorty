@@ -17,4 +17,9 @@ RSpec.configure do |config|
   config.expose_dsl_globally = false
   config.include RSpecMixin, type: :request
   config.include JsonHelpers, type: :request
+
+  config.around(:each) do |example|
+    RepositoryRegister.register(:short_code, InMemoryRepository.new)
+    example.run
+  end
 end
