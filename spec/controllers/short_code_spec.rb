@@ -1,4 +1,4 @@
-RSpec.describe MyShorty::ShortCode do
+RSpec.describe ShortCode do
 
   describe 'GET /' do
     it 'returns ok' do
