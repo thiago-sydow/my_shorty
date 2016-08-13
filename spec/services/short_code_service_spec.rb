@@ -74,4 +74,26 @@ RSpec.describe ShortCodeService do
       end
     end
   end
+
+  describe '#get_code_stats' do
+    let(:service) { ShortCodeService.new('my_pref_code', 'http://url.com') }
+
+    before do
+      Timecop.freeze(Time.now)
+      service.create_code
+    end
+
+    after { Timecop.return }
+
+    context 'when shortcode was visited at least once' do
+      before { service.get_redirect_url }
+
+      it { expect(service.get_code_stats[:lastSeenDate]).to eq Time.now.iso8601 }
+      it { expect(service.get_code_stats[:redirectCount]).to eq 1 }
+    end
+
+    context 'when shortcode was never visited' do
+      it { expect(service.get_code_stats).not_to have_key(:lastSeenDate) }
+    end
+  end
 end
