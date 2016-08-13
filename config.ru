@@ -1,3 +1,3 @@
 require './config/environment'
 
-run ShortCode
+run ShortCodeController
