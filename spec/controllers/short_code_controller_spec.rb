@@ -6,7 +6,7 @@ RSpec.describe ShortCodeController, type: :request do
 
         before { post '/shorten', params }
 
-        it { expect(last_response).to be_created }
+        it { expect(last_response.status).to eq 201 }
 
         it 'returns a generated shortcode' do
           expect(json_body['shortcode']).not_to be_empty
@@ -19,12 +19,12 @@ RSpec.describe ShortCodeController, type: :request do
         before { post '/shorten', params }
 
         context 'and this shortcode is available' do
-          it { expect(last_response).to be_created }
+          it { expect(last_response.status).to eq 201 }
           it { expect(json_body['shortcode']).to eq params[:shortcode] }
         end
 
         context 'and this shortcode is not available' do
-          it { expect(last_response).to be_created }
+          it { expect(last_response.status).to eq 201 }
 
           it 'returns a generated shortcode' do
             expect(json_body['shortcode']).not_to be_empty
@@ -36,15 +36,15 @@ RSpec.describe ShortCodeController, type: :request do
     context 'when url is not present' do
       before { post '/shorten', {} }
 
-      it { expect(last_response).to be_bad_param }
+      it { expect(last_response.status).to eq 400 }
       it { expect(json_body['description']).to eq 'url is not present' }
     end
 
     context 'when param shortcode is invalid' do
       before { post '/shorten', { url: 'http://myshorty.com', shortcode: 'invalid-code' } }
 
-      it { expect(last_response).to be_bad_param }
-      it { expect(json_body['description']).to eq 'invalid shortcode' }
+      it { expect(last_response.status).to eq 422 }
+      it { expect(json_body['description']).to eq 'Invalid shortcode' }
     end
   end
 end
