@@ -12,6 +12,11 @@ class ShortCodeController < Sinatra::Base
     [302, { 'Location' => service.get_redirect_url }, '']
   end
 
+  get '/:shortcode/stats' do
+    service = ShortCodeService.new(params['shortcode'])
+    [200, service.get_code_stats.to_json]
+  end
+
   configure do
     # Disable unused features to speed up
     disable :method_override
