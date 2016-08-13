@@ -20,4 +20,8 @@ class InMemoryRepository < BaseRepository
   def exists?(code)
     @records.has_key?(code)
   end
+
+  def update(code, attributes)
+    @records[code] = attributes
+  end
 end
