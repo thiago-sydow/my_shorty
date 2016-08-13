@@ -66,4 +66,22 @@ RSpec.describe ShortCodeController, type: :request do
       it { expect(last_response.status).to eq 404 }
     end
   end
+
+  context 'GET /:shortcode/stats' do
+    let(:params) { { url: 'http://myshorty.com', shortcode: 'my_short_code' } }
+
+    before { post '/shorten', params }
+
+    context 'when :shortcode is in database' do
+      before { get "/#{params[:shortcode]}/stats" }
+
+      it { expect(json_body).not_to be_nil }
+    end
+
+    context 'when :shortcode is not in database' do
+      before { get "/yet_another_code/stats" }
+
+      it { expect(last_response.status).to eq 404 }
+    end
+  end
 end
