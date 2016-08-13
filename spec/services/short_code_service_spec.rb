@@ -45,4 +45,33 @@ RSpec.describe ShortCodeService do
       end
     end
   end
+
+  describe '#get_redirect_url' do
+    let(:service) { ShortCodeService.new('my_pref_code', 'http://url.com') }
+
+    before { service.create_code }
+
+    context 'when code shortcode exists' do
+      let(:repo) { RepositoryRegister.repository_for(:short_code) }
+
+      it { expect(service.get_redirect_url).to eq 'http://url.com' }
+
+      context 'updates code attributes' do
+        let(:code_attrs) { repo.find('my_pref_code') }
+
+        before { service.get_redirect_url }
+
+        it { expect(code_attrs[:redirect_count]).to eq 1 }
+        it { expect(code_attrs[:last_seen_date]).not_to be_nil }
+      end
+    end
+
+    context 'when code shortcode does not exist' do
+      let(:new_service) { ShortCodeService.new('non_existent_code') }
+
+      it 'raises a ShortCodeNotFound error' do
+        expect { new_service.get_redirect_url }.to raise_error(ShortCodeService::ShortCodeNotFound)
+      end
+    end
+  end
 end

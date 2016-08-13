@@ -4,31 +4,44 @@ class ShortCodeService
   SHORT_CODE_SIZE = 6
   MAX_ITERATIONS = 10
 
-  def initialize(preferred_code, url = nil, repo = RepositoryRegister.repository_for(:short_code))
+  def initialize(informed_code, url = nil, repo = RepositoryRegister.repository_for(:short_code))
     @repo = repo
-    @preferred_code = preferred_code
+    @informed_code = informed_code
     @url = url
   end
 
   def create_code
     raise UrlNotPresent if @url.nil?
-    raise InvalidShortCode unless valid_preferred_code?
+    raise InvalidShortCode unless valid_informed_code?
 
-    new_code = generate_or_use_preferred_code
+    new_code = generate_or_use_informed_code
 
     @repo.create_short_code(new_code, @url)
 
     new_code
   end
 
+  def get_redirect_url
+    code_attributes = @repo.find(@informed_code)
+
+    raise ShortCodeNotFound unless code_attributes
+
+    code_attributes[:last_seen_date] = Time.now
+    code_attributes[:redirect_count] += 1
+
+    @repo.update(@informed_code, code_attributes)
+
+    code_attributes[:url]
+  end
+
   private
 
-  def generate_or_use_preferred_code
-    return generate_new_code if @preferred_code.nil?
+  def generate_or_use_informed_code
+    return generate_new_code if @informed_code.nil?
 
-    raise ShortCodeAlreadyTaken if @repo.find(@preferred_code)
+    raise ShortCodeAlreadyTaken if @repo.find(@informed_code)
 
-    @preferred_code
+    @informed_code
   end
 
   def generate_new_code
@@ -49,12 +62,13 @@ class ShortCodeService
     return_code
   end
 
-  def valid_preferred_code?
-    @preferred_code.nil? || /^[0-9a-zA-Z_]{4,}$/ =~ @preferred_code
+  def valid_informed_code?
+    @informed_code.nil? || /^[0-9a-zA-Z_]{4,}$/ =~ @informed_code
   end
 
   class UrlNotPresent < StandardError; end
   class InvalidShortCode < StandardError; end
   class ShortCodeAlreadyTaken < StandardError; end
   class CouldNotGenerateCode < StandardError; end
+  class ShortCodeNotFound < StandardError; end
 end

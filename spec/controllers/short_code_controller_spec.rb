@@ -48,4 +48,22 @@ RSpec.describe ShortCodeController, type: :request do
       it { expect(json_body['description']).to eq 'Invalid shortcode' }
     end
   end
+
+  context 'GET /:shortcode' do
+    let(:params) { { url: 'http://myshorty.com', shortcode: 'my_short_code' } }
+    before { post '/shorten', params }
+
+    context 'when :shortcode is in database' do
+      before { get "/#{params[:shortcode]}" }
+
+      it { expect(last_response.status).to eq 302 }
+      it { expect(last_response.header['Location']).to eq params[:url] }
+    end
+
+    context 'when :shortcode is not in database' do
+      before { get "/yet_another_code" }
+
+      it { expect(last_response.status).to eq 404 }
+    end
+  end
 end

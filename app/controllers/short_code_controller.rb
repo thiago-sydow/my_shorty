@@ -7,6 +7,11 @@ class ShortCodeController < Sinatra::Base
     [201, { shortcode: generated_code }.to_json]
   end
 
+  get '/:shortcode' do
+    service = ShortCodeService.new(params['shortcode'])
+    [302, { 'Location' => service.get_redirect_url }, '']
+  end
+
   configure do
     # Disable unused features to speed up
     disable :method_override
@@ -31,6 +36,10 @@ class ShortCodeController < Sinatra::Base
 
   error ShortCodeService::ShortCodeAlreadyTaken do
     [409, { description: 'ShortCode already taken' }.to_json]
+  end
+
+  error ShortCodeService::ShortCodeNotFound do
+    [404, { description: 'ShortCode not found' }.to_json]
   end
 
 end

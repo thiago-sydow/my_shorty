@@ -12,4 +12,8 @@ class BaseRepository
     raise NotImplementedError
   end
 
+  def update(code, attributes)
+    raise NotImplementedError
+  end
+
 end
