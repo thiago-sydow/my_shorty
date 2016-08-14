@@ -1,18 +1,18 @@
 class BaseRepository
 
-  def find(code)
+  def find(_code)
     raise NotImplementedError
   end
 
-  def create_short_code(code, url)
+  def create_short_code(_code, _url)
     raise NotImplementedError
   end
 
-  def exists?(code)
+  def exists?(_code)
     raise NotImplementedError
   end
 
-  def update(code, attributes)
+  def update(_code, _attributes)
     raise NotImplementedError
   end
 
