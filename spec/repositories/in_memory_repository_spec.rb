@@ -42,7 +42,7 @@ RSpec.describe InMemoryRepository do
   end
 
   describe '#update' do
-    let(:updated) { { url: url, start_date: Time.now, redirect_count: 1, last_seen_date: nil } }
+    let(:updated) { { url: url, start_date: Time.now.iso8601, redirect_count: 1, last_seen_date: nil } }
 
     before do
       mem_repo.create_short_code(code, url)
