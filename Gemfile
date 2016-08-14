@@ -4,6 +4,7 @@ ruby '2.3.1'
 
 gem 'sinatra'
 gem 'thin'
+gem 'redis', '~>3.2'
 
 group :development, :test do
   gem 'byebug'
