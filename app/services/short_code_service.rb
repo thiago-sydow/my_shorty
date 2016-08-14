@@ -26,7 +26,7 @@ class ShortCodeService
 
     raise ShortCodeNotFound unless code_attributes
 
-    code_attributes[:last_seen_date] = Time.now
+    code_attributes[:last_seen_date] = Time.now.iso8601
     code_attributes[:redirect_count] += 1
 
     @repo.update(@informed_code, code_attributes)
@@ -46,11 +46,11 @@ class ShortCodeService
 
   def format_attributes(code_attributes)
     result = {
-      startDate: code_attributes[:start_date].iso8601,
+      startDate: Time.parse(code_attributes[:start_date]).iso8601,
       redirectCount: code_attributes[:redirect_count].to_i,
     }
 
-    result.merge!({ lastSeenDate: code_attributes[:last_seen_date].iso8601 }) if code_attributes[:redirect_count] > 0
+    result.merge!({ lastSeenDate: Time.parse(code_attributes[:last_seen_date]).iso8601 }) if code_attributes[:redirect_count] > 0
 
     result
   end
