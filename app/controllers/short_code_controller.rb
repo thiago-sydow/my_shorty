@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require 'sinatra/json'
 require 'json'
 
 class ShortCodeController < Sinatra::Base
@@ -6,7 +7,9 @@ class ShortCodeController < Sinatra::Base
     json_params = JSON.parse(request.body.read)
     service = ShortCodeService.new(json_params['shortcode'], json_params['url'])
     generated_code = service.create_code
-    [201, { shortcode: generated_code }.to_json]
+
+    status 201
+    json({ shortcode: generated_code })
   end
 
   get '/:shortcode' do
@@ -16,7 +19,9 @@ class ShortCodeController < Sinatra::Base
 
   get '/:shortcode/stats' do
     service = ShortCodeService.new(params['shortcode'])
-    [200, service.get_code_stats.to_json]
+
+    status 200
+    json(service.get_code_stats)
   end
 
   configure do
