@@ -15,4 +15,6 @@ group :test do
   gem 'rspec'
   gem 'rack-test'
   gem 'timecop'
+  gem 'simplecov', require: false
+  gem 'codeclimate-test-reporter', require: false
 end
