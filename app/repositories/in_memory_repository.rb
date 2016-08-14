@@ -11,7 +11,7 @@ class InMemoryRepository < BaseRepository
   def create_short_code(code, url)
     @records[code] = {
       url: url,
-      start_date: Time.now,
+      start_date: Time.now.iso8601,
       redirect_count: 0,
       last_seen_date: nil
     }
