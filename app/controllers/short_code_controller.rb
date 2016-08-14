@@ -1,8 +1,10 @@
 require 'sinatra/base'
+require 'json'
 
 class ShortCodeController < Sinatra::Base
   post '/shorten' do
-    service = ShortCodeService.new(params['shortcode'], params['url'])
+    json_params = JSON.parse(request.body.read)
+    service = ShortCodeService.new(json_params['shortcode'], json_params['url'])
     generated_code = service.create_code
     [201, { shortcode: generated_code }.to_json]
   end
@@ -32,19 +34,19 @@ class ShortCodeController < Sinatra::Base
   end
 
   error ShortCodeService::UrlNotPresent do
-    [400, { description: 'url is not present' }.to_json]
+    [400, 'url is not present']
   end
 
   error ShortCodeService::InvalidShortCode do
-    [422, { description: 'Invalid shortcode' }.to_json]
+    [422, 'Invalid shortcode']
   end
 
   error ShortCodeService::ShortCodeAlreadyTaken do
-    [409, { description: 'ShortCode already taken' }.to_json]
+    [409, 'ShortCode already taken']
   end
 
   error ShortCodeService::ShortCodeNotFound do
-    [404, { description: 'ShortCode not found' }.to_json]
+    [404, 'ShortCode not found']
   end
 
 end
