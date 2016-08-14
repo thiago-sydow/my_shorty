@@ -19,6 +19,7 @@ RSpec.configure do |config|
   config.include JsonHelpers, type: :request
 
   config.around(:each) do |example|
+    # Redis.new(url: ENV['REDIS_URL']).flushdb
     RepositoryRegister.register(:short_code, InMemoryRepository.new)
     example.run
   end
