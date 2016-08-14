@@ -16,7 +16,7 @@ class RedisRepository < BaseRepository
   def create_short_code(code, url)
     code_attrs = {
       url: url,
-      start_date: Time.now,
+      start_date: Time.now.iso8601,
       redirect_count: 0,
       last_seen_date: nil
     }
