@@ -6,6 +6,7 @@
 
 My Shorty is a simple url shortner service, available in Heroku at https://rocky-hamlet-97078.herokuapp.com
 
+The documentation of the API is available here: http://docs.myshorty.apiary.io
 
 ## Install
 The following commands will install git and some packages necessary to build ruby and gems:
