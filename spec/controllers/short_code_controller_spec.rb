@@ -9,6 +9,7 @@ RSpec.describe ShortCodeController, type: :request do
         before { post '/shorten', params.to_json, json_headers }
 
         it { expect(last_response.status).to eq 201 }
+        it { expect(last_response.header['Content-Type']).to eq 'application/json' }
 
         it 'returns a generated shortcode' do
           expect(json_body['shortcode']).not_to be_empty
@@ -22,6 +23,7 @@ RSpec.describe ShortCodeController, type: :request do
           before { post '/shorten', params.to_json, json_headers }
 
           it { expect(last_response.status).to eq 201 }
+          it { expect(last_response.header['Content-Type']).to eq 'application/json' }
           it { expect(json_body['shortcode']).to eq params[:shortcode] }
         end
 
@@ -78,6 +80,7 @@ RSpec.describe ShortCodeController, type: :request do
       before { get "/#{params[:shortcode]}/stats" }
 
       it { expect(json_body).not_to be_nil }
+      it { expect(last_response.header['Content-Type']).to eq 'application/json' }
     end
 
     context 'when :shortcode is not in database' do
