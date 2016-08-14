@@ -18,13 +18,17 @@ RSpec.describe ShortCodeService do
       end
 
       context 'when a new unique code cannot be generated within the MAX_ITERATIONS attempts' do
-        before { stub_const("ShortCodeService::MAX_ITERATIONS", 0) }
+        let(:repo) { RepositoryRegister.repository_for(:short_code) }
+
+        before do
+          stub_const("ShortCodeService::MAX_ITERATIONS", 1)
+          allow(repo).to receive(:exists?).and_return(true)
+        end
 
         it 'raises a ShortCodeService::UrlNotPresent error' do
           expect { service.create_code }.to raise_error(ShortCodeService::CouldNotGenerateCode)
         end
       end
-
     end
 
     context 'when preferred_code is present' do
