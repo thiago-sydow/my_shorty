@@ -2,7 +2,7 @@ RSpec.describe InMemoryRepository do
   let(:mem_repo) { InMemoryRepository.new }
   let(:code) { 'my_code' }
   let(:url) { 'http://myurl.com'}
-  let(:expected) { { url: url, start_date: Time.now, redirect_count: 0, last_seen_date: nil } }
+  let(:expected) { { url: url, start_date: Time.now.iso8601, redirect_count: 0, last_seen_date: nil } }
 
   before { Timecop.freeze(Time.now) }
   after { Timecop.return }
