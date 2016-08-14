@@ -18,7 +18,7 @@ object containing an URL and a preferred shortcode.
         
         + url (string, required) - The url that the shortcode will point to
         + shortcode (string) - If informed, it will try to register this as
-        the shortcode.
+        the shortcode. It must respect the *^[0-9a-zA-Z_]{4,}$* pattern
             
     
 
@@ -27,18 +27,21 @@ object containing an URL and a preferred shortcode.
     + Attributes (object)
         
         + shortcode (string) - The returned shortcode
-            
+    
+    + Body
+        
+            {"shortcode":"example_shortcode"}
 
-+ Response 400 (text/plain)
++ Response 400 (text/html)
     
         Url is not present.
 
-+ Response 409 (text/plain)
++ Response 409 (text/html)
 
         Shortcode already taken.
 
 
-+ Response 422 (text/plain)
++ Response 422 (text/html)
 
         Invalid shortcode.
 
@@ -51,13 +54,13 @@ You will be redirected for the shortcode associated URL
     + shortcode (string) - shortcode to get associated URL
 
 
-+ Response 302 (text/plain)
++ Response 302 (text/html)
 
     + Header
 
             Location: http://shortcode_associated_url.com
 
-+ Response 404 (text/plain)
++ Response 404 (text/html)
 
             Shortcode not found.
 
@@ -71,13 +74,17 @@ Return the statistics for the shortcode
 
 + Response 200 (application/json)
         
-        + Attributes (object)
-        
-            + startDate (datetime)    - Date of inclusion of the shortcode
-            + redirectCount (integer) - Number of times that the shortcode was used.
-            + lastSeenDate (datetime, optional) - Last time that the shortcode was used. This key will not be present if redirectCount == 0
+    + Attributes (object)
     
+        + startDate (string)    - Date of inclusion of the shortcode (ISO8601)
+        + redirectCount (number) - Number of times that the shortcode was used.
+        + lastSeenDate (string) - Last time that the shortcode was used (ISO8601). This key will not be present if redirectCount == 0
+    
+    + Body
+        
+            {"startDate":"2016-08-14T17:11:09+00:00","redirectCount":1,"lastSeenDate":"2016-08-14T17:11:20+00:00"}
 
-+ Response 404 (text/plain)
+
++ Response 404 (text/html)
 
             Shortcode not found.
