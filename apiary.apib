@@ -1,0 +1,83 @@
+FORMAT: 1A
+HOST: https://rocky-hamlet-97078.herokuapp.com
+
+# My Shorty
+
+Polls is a simple API allowing consumers to view polls and vote in them.
+
+## Shortcode [/]
+
+### Create Shortcode [POST /shorten]
+
+You may create your own shortcode using this action. It takes a JSON
+object containing an URL and a preferred shortcode.
+
++ Request (application/json)
+
+    + Attributes (object)
+        
+        + url (string, required) - The url that the shortcode will point to
+        + shortcode (string) - If informed, it will try to register this as
+        the shortcode.
+            
+    
+
++ Response 201 (application/json)
+    
+    + Attributes (object)
+        
+        + shortcode (string) - The returned shortcode
+            
+
++ Response 400 (text/plain)
+    
+        Url is not present.
+
++ Response 409 (text/plain)
+
+        Shortcode already taken.
+
+
++ Response 422 (text/plain)
+
+        Invalid shortcode.
+
+### Redirect to URL [GET /{shortcode}]
+
+You will be redirected for the shortcode associated URL
+
++ Parameters
+
+    + shortcode (string) - shortcode to get associated URL
+
+
++ Response 302 (text/plain)
+
+    + Header
+
+            Location: http://shortcode_associated_url.com
+
++ Response 404 (text/plain)
+
+            Shortcode not found.
+
+### Show Statistics [GET /{shortcode}/stats]
+
+Return the statistics for the shortcode
+
++ Parameters
+
+    + shortcode (string) - shortcode to get associated URL
+
++ Response 200 (application/json)
+        
+        + Attributes (object)
+        
+            + startDate (datetime)    - Date of inclusion of the shortcode
+            + redirectCount (integer) - Number of times that the shortcode was used.
+            + lastSeenDate (datetime, optional) - Last time that the shortcode was used. This key will not be present if redirectCount == 0
+    
+
++ Response 404 (text/plain)
+
+            Shortcode not found.
